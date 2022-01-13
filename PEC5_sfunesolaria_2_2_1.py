@@ -31,7 +31,9 @@ wordsDF = linesDF.withColumn("window", linesDF.timestamp)\
                 .withColumn("value", linesDF.value)
 
 # Generamos el word count en tiempo de ejecución
-wordCountsDF = wordsDF.groupBy('window', 'value').count()
+from pyspark.sql.functions import window
+
+wordCountsDF = wordsDF.groupBy(window('window', "10 seconds", "5 seconds"), 'value').count()
 
 # Iniciamos la consuta que muestra por consola o almacena en memoria el word count. 
 # Trabajamos a partir del DataFrame que contiene la agrupación de las palabras y el numero de repeticiones
