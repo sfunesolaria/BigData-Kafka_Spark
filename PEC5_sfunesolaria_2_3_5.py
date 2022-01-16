@@ -44,7 +44,8 @@ jsonSchema = StructType([ StructField("callsign", StringType(), True),
                         ])
 
 df = wordsDF.withColumn("value", from_json(col("value"), jsonSchema))
-df_select = df.select("value.vertical_rate").groupBy('vertical_rate').count()
+df_select = df.select("value.vertical_rate").filter(col("vertical_rate").isNotNull()) \
+            .groupBy('vertical_rate').count()
 
 query = df_select\
     .writeStream\
