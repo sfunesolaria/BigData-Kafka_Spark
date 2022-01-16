@@ -34,7 +34,7 @@ linesDF = spark\
 wordsDF = linesDF.withColumn("value", linesDF.value)
 
 from pyspark.sql.types import StringType, LongType, StructType, StructField
-from pyspark.sql.functions import from_json, col
+from pyspark.sql.functions import from_json, col, asc
 jsonSchema = StructType([ StructField("callsign", StringType(), True),
                           StructField("velocity", StringType(), True),
                           StructField("longitude", StringType(), True),
@@ -58,5 +58,5 @@ from time import sleep
 while True:
     clear_output(wait=True)
 #    display(query.status)
-    display(spark.sql('SELECT * FROM palabras').show())
+    display(spark.sql('SELECT country, count FROM palabras').orderBy(asc("country")).show())
     sleep(5)
