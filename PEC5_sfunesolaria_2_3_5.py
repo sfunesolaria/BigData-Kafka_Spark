@@ -34,7 +34,7 @@ linesDF = spark\
 wordsDF = linesDF.withColumn("value", linesDF.value)
 
 from pyspark.sql.types import StringType, LongType, StructType, StructField
-from pyspark.sql.functions import from_json, col, asc
+from pyspark.sql.functions import from_json, col, asc, when
 jsonSchema = StructType([ StructField("callsign", StringType(), True),
                           StructField("velocity", StringType(), True),
                           StructField("longitude", StringType(), True),
@@ -45,7 +45,8 @@ jsonSchema = StructType([ StructField("callsign", StringType(), True),
 
 df = wordsDF.withColumn("value", from_json(col("value"), jsonSchema))
 df_select = df.select("value.vertical_rate").filter(col("vertical_rate").isNotNull()) \
-            .groupBy('vertical_rate').count()
+            .withColumn("estado", when((col("vertical_rate") < 0), -1).when((col("vertical_rate") > 0), 1).otherwise(0) ) \
+            .groupBy('estado').count()
 
 query = df_select\
     .writeStream\
