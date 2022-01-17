@@ -31,7 +31,7 @@ wordsDF = linesDF.select(
     ).alias('palabra'), current_timestamp().alias('tiempo')
 )
 
-wordCountsDF = wordsDF.withWatermark("tiempo", "1 minute").groupBy('palabra', 'tiempo').count()
+wordCountsDF = wordsDF.withWatermark("tiempo", "1 second").groupBy('palabra', 'tiempo').count()
 
 query = wordCountsDF\
     .writeStream\
