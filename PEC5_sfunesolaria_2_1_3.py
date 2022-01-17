@@ -36,8 +36,8 @@ wordCountsDF = wordsDF.withWatermark("tiempo", "1 minute").groupBy('palabra', 't
 query = wordCountsDF\
     .writeStream\
     .outputMode('append')\
-    .option("checkpointLocation", "/user/sfunesolaria/punto_control_pec5") \
-    .option("hdfs_url", "hdfs:///user/sfunesolaria/punto_control_pec5") \
+    .option("checkpointLocation", "/user/sfunesolaria/pec5_1_3") \
+    .option("hdfs_url", "hdfs:///user/sfunesolaria/pec5_1_3") \
     .format("memory") \
     .queryName("palabras") \
     .start()
@@ -50,6 +50,6 @@ while True:
     display(spark.sql('SELECT palabra, tiempo FROM palabras WHERE LENGTH(palabra) > 3').show())
     sleep(5)
 
- # hdfs dfs -rmr /user/sfunesolaria/punto_control_pec5
- # hdfs dfs -ls /user/sfunesolaria/punto_control_pec5
- # hdfs dfs -get /user/sfunesolaria/punto_control_pec5 punto_control_pec5
+ # hdfs dfs -rmr /user/sfunesolaria/pec5_1_3
+ # hdfs dfs -ls /user/sfunesolaria/pec5_1_3
+ # hdfs dfs -get /user/sfunesolaria/pec5_1_3 pec5_1_3
